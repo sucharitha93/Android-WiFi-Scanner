@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     WiFiScanReceiver wifiReceiver;
     private SensorManager mSensorManager;
     private TextView textView;
+    private EditText xCoordinate, yCoordinate;
     File file;
 
 
@@ -77,12 +79,28 @@ public class MainActivity extends AppCompatActivity {
 */
 
         textView = (TextView) findViewById(R.id.data);
+        xCoordinate = (EditText) findViewById(R.id.xcoordinate);
+        yCoordinate = (EditText) findViewById(R.id.ycoordinate);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiReceiver = new WiFiScanReceiver();
 
     }
+    public void btnClick(View v)
+    {
+        String x,y;
+        x= xCoordinate.getText().toString();
+        y = yCoordinate.getText().toString();
+        if (x.isEmpty() && y.isEmpty())
+        {
+            Toast.makeText(this,"Enter the co-ordinates to begin SCAN",Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            scan(v);
+        }
+    }
 
-    public void btnClick(View v){
+    public void scan(View v){
 
         textView.setText("");
         IntentFilter filterScanResult = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
@@ -133,10 +151,13 @@ public class MainActivity extends AppCompatActivity {
                         ScanResult accessPoint = wifiScanResultList.get(i);
                         String listItem = "SSID: "+accessPoint.SSID + "\n" + "MAC Address: "+accessPoint.BSSID + "\n" + "RSSI Signal Level"+accessPoint.level+ "\n" + "TimeStamp: "+accessPoint.timestamp;
                         textView.append(listItem + "\n\n");
+                        xCoordinate.getText().toString();
+                        yCoordinate.getText().toString();
 
-                            String content = accessPoint.SSID + ","+accessPoint.BSSID + ","+accessPoint.level+ ","+accessPoint.timestamp+"\n";
+                            String content = xCoordinate.getText().toString()+","+yCoordinate.getText().toString()+","+accessPoint.frequency+","+accessPoint.channelWidth+","+accessPoint.capabilities+","+accessPoint.SSID + ","+accessPoint.BSSID + ","+accessPoint.level+ ","+accessPoint.timestamp+"\n";
                             bw.append(content);
                     }
+                    bw.append("\n");
                     textView.append("***********************************\n");
                     bw.close();
                 } catch (IOException e) {
