@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             }
                             else if(macList[15].equalsIgnoreCase(accessPoint.BSSID))
                             {
-                                rssiList[15] = rssiList[2]+ accessPoint.level;
+                                rssiList[15] = rssiList[15]+ accessPoint.level;
                                 cnt[15] = cnt[15] + 1;
                             }
                             else if(macList[17].equalsIgnoreCase(accessPoint.BSSID))
